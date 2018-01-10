@@ -1,23 +1,21 @@
-# loan = read.csv('prosperLoanData.csv')
-# names(loan)
-# head(loan)
-# 
-# n = dim(loan)[1]
-# p = dim(loan)[2]
-# 
-# selected = rep(0, 81)
-# for(i in 1:p){
-#   selected[i] = ifelse((mean(is.na(loan[,i]))) > 0.25, 0, 1)
-# }
-# 
-# cleaned_data = loan[ ,selected == 1]
-# cleaned_data = na.omit(cleaned_data)
-# cleaned_data = cleaned_data[!(cleaned_data$IncomeRange %in% c('$0','Not displayed', 'Not employed')), ]
-# 
-# 
-# cleaned_data = cleaned_data[cleaned_data$BorrowerState != "",]
-# write.csv(cleaned_data, 'cleaned_loan.csv')
-cleaned_data = read.csv('cleaned_loan.csv')
+loan = read.csv('prosperLoanData.csv')
+names(loan)
+head(loan)
+
+n = dim(loan)[1]
+p = dim(loan)[2]
+
+selected = rep(0, 81)
+for(i in 1:p){
+  selected[i] = ifelse((mean(is.na(loan[,i]))) > 0.25, 0, 1)
+}
+
+cleaned_data = loan[ ,selected == 1]
+cleaned_data = na.omit(cleaned_data)
+cleaned_data = cleaned_data[!(cleaned_data$IncomeRange %in% c('$0','Not displayed', 'Not employed')), ]
+
+
+cleaned_data = cleaned_data[cleaned_data$BorrowerState != "",]
 
 head(cleaned_data)
 
@@ -43,7 +41,6 @@ dropped_data$IncomeRange = factor(dropped_data$IncomeRange, levels = c( "$100,00
 
 names(dropped_data)
 head(dropped_data)
-write.csv(dropped_data, 'dropped_loan.csv', row.names=FALSE)
 
 library(dplyr)
 dropp_groupby_year_st = dropped_data %>%
