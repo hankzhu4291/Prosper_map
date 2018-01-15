@@ -20,8 +20,6 @@ There are some states in which no information is given so white blanks are shown
 - MonthlyLoanPayment:	The scheduled monthly loan payment.
 - StatedMonthlyIncome:	The monthly income the borrower stated at the time the listing was created.
 
-
-
 ## Summary
 This map is about loan information by state in US from 2007 to 2014. The color is set according to normalized  average "MonthlyLoanPayment" in each state. When mouse move over the state, it would show all information in this state. There are 8 buttons for years. When you click it, the corresponding map in that year would be shown.
 
