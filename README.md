@@ -23,6 +23,9 @@ There are some states in which no information is given so white blanks are shown
 ## Summary
 This map is about loan information by state in US from 2007 to 2014. The color is set according to normalized  average "MonthlyLoanPayment" in each state. When mouse move over the state, it would show all information in this state. There are 8 buttons for years. When you click it, the corresponding map in that year would be shown.
 
+## Feedback
+1. put text next to the years or make the buttons look more clickable
+
 ## Exploration
 There is a dramatically decrease about overall loan data from 2007 to 2009. This is reasonable because the economic crisis happened at that time, which greatly influenced global economy including USA. From 2009 to 2014, all loan record gradually increases.
 
