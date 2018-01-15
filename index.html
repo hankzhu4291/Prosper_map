@@ -6,6 +6,7 @@
     <script src="./js/uStates.js"></script> <!-- creates uStates. -->
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <h2></h2>
+    <div class = 'years_buttons'></div>
     <style>
     	.state{
     		fill: none;
@@ -59,17 +60,30 @@
     	#tooltip tr td:nth-child(2){
     		text-align:center;
     	}
+
+      * {
+		    -webkit-box-sizing: border-box;
+		    -moz-box-sizing: border-box;
+		    -ms-box-sizing: border-box;
+		    box-sizing: border-box;
+		    }
+
       div.years_buttons {
-        position: absolute;
-        top: 50px;
-        right: 230px;
+        display: -webkit-flex;
+  			width: 50%;
+  			order: 4;
+  			justify-content: space-between;
+  			margin: 2%;
+        top: 150px;
       }
 
       div.years_buttons div {
+
+        outline: black solid;
+        outline-width: thin;
         background-color: black;
         color: white;
-        padding: 3px;
-        margin: 7px;
+
       }
     </style>
 
@@ -85,15 +99,15 @@
                                 // .key(function(d) { return d.Term; })
                                 .key(function(d) { return d.BorrowerState; })
                                 .rollup(function(v) { return {
-                                  AVGCreditScoreRangeLower: d3.mean(v, function(d) {return d.AVGCreditScoreRangeLower}),
-                                  AVGCreditScoreRangeUpper: d3.mean(v, function(d) {return d.AVGCreditScoreRangeUpper}),
-                                  AVGBorrowerRate: d3.mean(v, function(d) {return d.AVGBorrowerRate}),
-                                  AVGMonthlyLoanPayment: d3.mean(v, function(d) {return d.AVGMonthlyLoanPayment}),
-                                  AVGDebtToIncomeRatio: d3.mean(v, function(d) {return d.AVGDebtToIncomeRatio}),
-                                  AVGStatedMonthlyIncome: d3.mean(v, function(d) {return d.AVGStatedMonthlyIncome})
+                                  AVGCreditScoreRangeLower: d3.median(v, function(d) {return d.AVGCreditScoreRangeLower}),
+                                  AVGCreditScoreRangeUpper: d3.median(v, function(d) {return d.AVGCreditScoreRangeUpper}),
+                                  AVGBorrowerRate: d3.median(v, function(d) {return d.AVGBorrowerRate}),
+                                  AVGMonthlyLoanPayment: d3.median(v, function(d) {return d.AVGMonthlyLoanPayment}),
+                                  AVGDebtToIncomeRatio: d3.median(v, function(d) {return d.AVGDebtToIncomeRatio}),
+                                  AVGStatedMonthlyIncome: d3.median(v, function(d) {return d.AVGStatedMonthlyIncome})
                                 }; })
                                 .entries(data);
-                                
+
           states = ["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
           "ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH",
           "MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT",
@@ -145,13 +159,11 @@
                var filtered = infobyYearTerm.filter(function(d){
                  return d.key === year;
                });
-
                // transform data
                states_info = filtered[0].values
                transformed_data = {}
-               states_info.forEach(function (d){d.values['color'] = d3.interpolate("#fee6ce", "#e6550d")((d.values['AVGMonthlyLoanPayment'] - 146.2)/341*2.5)});
+               states_info.forEach(function (d){d.values['color'] = d3.interpolate("#fee6ce", "#e6550d")((d.values['AVGMonthlyLoanPayment'] - 74)/370*1.5)});
                states_info.forEach(function (d) {if (states.includes(d.key)) {transformed_data[d.key] = d.values}});
-
                //draw states on id #statesvg
                uStates.draw("#statesvg", transformed_data, tooltipHtml);
 
@@ -185,23 +197,23 @@
                svg.append("rect")
                   .attr("width", 20)
                   .attr("height", 200)
-                   .attr("x", 1000)
-                   .attr("y", 390)
+                   .attr("x", 910)
+                   .attr("y", 210)
                   .style("fill", "url(#linear-gradient)");
 
                svg.append('text')
-                   .attr("x", 970)
-                   .attr("y", 405)
-                   .text('145')
+                   .attr("x", 880)
+                   .attr("y", 225)
+                   .text('74')
 
                svg.append('text')
-                   .attr("x", 970)
-                   .attr("y", 590)
-                   .text('340')
+                   .attr("x",880)
+                   .attr("y", 410)
+                   .text('370')
 
                svg.append('text')
-                   .attr("x", 920)
-                   .attr("y", 380)
+                   .attr("x", 830)
+                   .attr("y", 430)
                    .text('Monthly Loan Payment')
 
               d3.select(self.frameElement).style("height", "600px");
@@ -222,9 +234,7 @@
                 if(year_idx >= years.length) {
                   clearInterval(year_interval)
 
-                  var buttons = d3.select('body')
-                                  .append('div')
-                                  .attr('class', 'years_buttons')
+                  var buttons = d3.select('.years_buttons')
                                   .selectAll('div')
                                   .data(years)
                                   .enter()
@@ -232,6 +242,7 @@
                                   .text(function (d){
                                     return d;
                                   });
+
                   buttons.on('click', function(d){
                     d3.select('.years_buttons')
                       .selectAll('div')
@@ -260,5 +271,4 @@
       d3.csv('./data/dropped_groupby_year_st.csv', draw)
 
       </script>
-</body>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
-</html>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+</body>
