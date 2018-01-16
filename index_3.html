@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="./js/uStates.js"></script> <!-- creates uStates. -->
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <h2></h2>
+    <div class = 'years_buttons'></div>
+    <style>
+    	.state{
+    		fill: none;
+    		stroke: #a9a9a9;
+    		stroke-width: 1;
+    	}
+    	.state:hover{
+    		fill-opacity:0.5;
+    	}
+
+      h2 {
+    		text-align: center;
+    		order: 1;
+      }
+
+    	#tooltip {
+    		position: absolute;
+    		text-align: center;
+    		padding: 20px;
+    		margin: 10px;
+    		font: 12px sans-serif;
+    		background: lightsteelblue;
+    		border: 1px;
+    		border-radius: 2px;
+    		pointer-events: none;
+    	}
+    	#tooltip h4{
+    		margin:0;
+    		font-size:14px;
+    	}
+    	#tooltip{
+    		background:rgba(0,0,0,0.9);
+    		border:1px solid grey;
+    		border-radius:5px;
+    		font-size:12px;
+    		width:auto;
+    		padding:4px;
+    		color:white;
+    		opacity:0;
+    	}
+    	#tooltip table{
+    		table-layout:fixed;
+    	}
+    	#tooltip tr td{
+    		padding:0;
+    		margin:0;
+    	}
+    	#tooltip tr td:nth-child(1){
+    		width:50px;
+    	}
+    	#tooltip tr td:nth-child(2){
+    		text-align:center;
+    	}
+
+      * {
+		    -webkit-box-sizing: border-box;
+		    -moz-box-sizing: border-box;
+		    -ms-box-sizing: border-box;
+		    box-sizing: border-box;
+		    }
+
+      div.years_buttons {
+        display: -webkit-flex;
+  			width: 50%;
+  			justify-content: space-between;
+  			margin: 2%;
+        top: 150px;
+        fill: none;
+    		stroke: black;
+        border-radius: 2px;
+        box-shadow: 0 9px #999;
+      }
+
+      div.years_buttons div {
+
+        background-color: black;
+        color: white;
+        border-top:		2px solid #a3ceda;
+        border-left:		2px solid #a3ceda;
+        border-right:		2px solid #4f6267;
+        border-bottom:		2px solid #4f6267;
+        padding:		10px 20px;
+        font-size:		14px;
+        background-color:	black;
+        font-weight:		bold;
+        color:			white;
+
+      }
+    </style>
+
+    <div id="tooltip"></div><!-- div to hold tooltip. -->
+    <svg id="statesvg"></svg> <!-- svg to hold the map. -->
+    <script type="text/javascript">
+
+      function draw(data) {
+
+          // Group data by State
+          var infobyYearTerm = d3.nest()
+                                .key(function(d) { return d.creation_year; })
+                                // .key(function(d) { return d.Term; })
+                                .key(function(d) { return d.BorrowerState; })
+                                .rollup(function(v) { return {
+                                  AVGCreditScoreRangeLower: d3.median(v, function(d) {return d.AVGCreditScoreRangeLower}),
+                                  AVGCreditScoreRangeUpper: d3.median(v, function(d) {return d.AVGCreditScoreRangeUpper}),
+                                  AVGBorrowerRate: d3.median(v, function(d) {return d.AVGBorrowerRate}),
+                                  AVGMonthlyLoanPayment: d3.median(v, function(d) {return d.AVGMonthlyLoanPayment}),
+                                  AVGDebtToIncomeRatio: d3.median(v, function(d) {return d.AVGDebtToIncomeRatio}),
+                                  AVGStatedMonthlyIncome: d3.median(v, function(d) {return d.AVGStatedMonthlyIncome})
+                                }; })
+                                .entries(data);
+
+          states = ["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
+          "ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH",
+          "MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT",
+          "CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN",
+          "WI", "MO", "AR", "OK", "KS", "LA", "VA"]
+
+          // Plot mouseOver information
+        	function tooltipHtml(n, d){
+            /*
+            function to create html content string in tooltip div.
+            */
+        		return "<h4>"+n+"</h4><table>"+
+        			"<tr><td>CreditScoreRangeLower</td><td>"+(d.AVGCreditScoreRangeLower)+"</td></tr>"+
+        			"<tr><td>CreditScoreRangeUpper</td><td>"+(d.AVGCreditScoreRangeUpper)+"</td></tr>"+
+        			"<tr><td>BorrowerRate</td><td>"+(d.AVGBorrowerRate)+"</td></tr>"+
+              "<tr><td>MonthlyLoanPayment</td><td>"+(d.AVGMonthlyLoanPayment)+"</td></tr>"+
+              "<tr><td>StatedMonthlyIncome</td><td>"+(d.AVGStatedMonthlyIncome)+"</td></tr>"+
+              "<tr><td>DebtToIncomeRatio</td><td>"+(d.AVGDebtToIncomeRatio)+"</td></tr>"+
+
+        			"</table>";
+            }
+
+            years = ['2007', '2008', '2009', '2010', '2011', '2012', '2013','2014']
+
+           function update(year){
+               /*
+               show the map for each year
+               */
+               // remove the previous map except for the first year 2007
+               if (! d3.select('#statesvg').selectAll('.state').empty()) { // Or just `if (element.childNodes.length)`
+                   d3.select('#statesvg')
+                    .selectAll('.state').remove();
+                   d3.select('h2')
+                     .text('Loan Information in each state in ' + year);
+               }
+
+               // set height, margin, width
+               var margin = 75,
+                   width = 1200 - margin,
+                   height = 600 - margin;
+
+               // set the size of svg element
+               var svg = d3.select("#statesvg")
+                   .attr("width", width + margin)
+                   .attr("height", height + margin)
+                   .append('g')
+
+               // filter data by the specific year
+               var filtered = infobyYearTerm.filter(function(d){
+                 return d.key === year;
+               });
+               // transform data
+               states_info = filtered[0].values
+               transformed_data = {}
+               states_info.forEach(function (d){d.values['color'] =
+                      d3.interpolate("#fee6ce", "#f03b20")((d.values['AVGMonthlyLoanPayment'] - 74)/532*1.5)});
+
+               states_info.forEach(function (d) {if (states.includes(d.key)) {transformed_data[d.key] = d.values}});
+               //draw states on id #statesvg
+               uStates.draw("#statesvg", transformed_data, tooltipHtml);
+
+               /*
+               add legend
+               */
+
+               //Append a defs (for definition) element to your SVG
+               var defs = svg.append("defs");
+
+               //Append a linearGradient element to the defs and give it a unique id
+               var linearGradient = defs.append("linearGradient")
+                   .attr("id", "linear-gradient");
+
+               linearGradient
+                     .attr("x1", "0%")
+                     .attr("y1", "0%")
+                     .attr("x2", "0%")
+                     .attr("y2", "100%");
+
+               //Set the color for the start (0%)
+               linearGradient.append("stop")
+                   .attr("offset", "0%")
+                   .attr("stop-color", "#fee6ce"); //light orange
+
+               //Set the color for the end (100%)
+               linearGradient.append("stop")
+                   .attr("offset", "100%")
+                   .attr("stop-color", "#f03b20"); //dark orange
+
+               svg.append("rect")
+                  .attr("width", 20)
+                  .attr("height", 300)
+                   .attr("x", 910)
+                   .attr("y", 210)
+                  .style("fill", "url(#linear-gradient)");
+
+               svg.append('text')
+                   .attr("x", 880)
+                   .attr("y", 225)
+                   .text('74')
+
+               svg.append('text')
+                   .attr("x",880)
+                   .attr("y", 510)
+                   .text('532')
+
+               svg.append('text')
+                   .attr("x", 830)
+                   .attr("y", 530)
+                   .text('Monthly Loan Payment')
+
+              d3.select(self.frameElement).style("height", "600px");
+           }
+
+             // automatically change map by year
+              for (i=0; i<8; i++){
+                update(years[i]);
+              }
+              var year_idx = 0;
+
+              // add years buttons for user to select map in specific year
+              var year_interval = setInterval(function(){
+                update(years[year_idx]);
+
+                year_idx++;
+
+                if(year_idx >= years.length) {
+                  clearInterval(year_interval)
+
+                  var buttons = d3.select('.years_buttons')
+                                  .selectAll('div')
+                                  .data(years)
+                                  .enter()
+                                  .append('div')
+                                  .text(function (d){
+                                    return d;
+                                  });
+
+                  buttons.on('click', function(d){
+                    d3.select('.years_buttons')
+                      .selectAll('div')
+                      .transition()
+                      .duration(300)
+                      .style('background', 'black')
+                      .style('color', 'white')
+
+                    d3.select(this)
+                      .transition()
+                      .duration(300)
+                      .style('background', '#f03b20')
+                      .style('color', 'white')
+
+                    update(d);
+                  })
+                }
+              }, 1000);
+
+      }
+    </script>
+  </head>
+<body>
+      <script type="text/javascript">
+
+      d3.csv('./data/dropped_groupby_year_st.csv', draw)
+
+      </script>
+</body>
