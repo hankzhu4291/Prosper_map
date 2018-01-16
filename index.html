@@ -172,7 +172,8 @@
                // transform data
                states_info = filtered[0].values
                transformed_data = {}
-               states_info.forEach(function (d){d.values['color'] = d3.interpolate("#fee6ce", "#e6550d")((d.values['AVGMonthlyLoanPayment'] - 74)/370*1.5)});
+               states_info.forEach(function (d){d.values['color'] =
+                      d3.interpolate("#fee6ce", "#e6550d")((d.values['AVGMonthlyLoanPayment'] - 74)/370*1.5)});
                states_info.forEach(function (d) {if (states.includes(d.key)) {transformed_data[d.key] = d.values}});
                //draw states on id #statesvg
                uStates.draw("#statesvg", transformed_data, tooltipHtml);
