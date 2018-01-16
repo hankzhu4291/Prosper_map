@@ -25,6 +25,7 @@ This map is about loan information by state in US from 2007 to 2014. The color i
 
 ## Feedback
 1. put text next to the years or make the buttons look more clickable
+2. The Monthly Loan Payment bar on the right side shows the range from 74-370, while some states obviously have monthly loan payment out of this range. (ie. Kentucky 2007/ Alaska 2014). It would be a little bit confusing as one may initially consider 370 as the maximum loan payment.
 
 ## Exploration
 There is a dramatically decrease about overall loan data from 2007 to 2009. This is reasonable because the economic crisis happened at that time, which greatly influenced global economy including USA. From 2009 to 2014, all loan record gradually increases.
