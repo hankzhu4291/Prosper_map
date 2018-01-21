@@ -105,18 +105,17 @@
 
           // Group data by State
           var infobyYearTerm = d3.nest()
-                                .key(function(d) { return d.creation_year; })
-                                // .key(function(d) { return d.Term; })
-                                .key(function(d) { return d.BorrowerState; })
-                                .rollup(function(v) { return {
-                                  AVGCreditScoreRangeLower: d3.median(v, function(d) {return d.AVGCreditScoreRangeLower}),
-                                  AVGCreditScoreRangeUpper: d3.median(v, function(d) {return d.AVGCreditScoreRangeUpper}),
-                                  AVGBorrowerRate: d3.median(v, function(d) {return d.AVGBorrowerRate}),
-                                  AVGMonthlyLoanPayment: d3.median(v, function(d) {return d.AVGMonthlyLoanPayment}),
-                                  AVGDebtToIncomeRatio: d3.median(v, function(d) {return d.AVGDebtToIncomeRatio}),
-                                  AVGStatedMonthlyIncome: d3.median(v, function(d) {return d.AVGStatedMonthlyIncome})
-                                }; })
-                                .entries(data);
+            .key(function(d) { return d.creation_year; })
+            .key(function(d) { return d.BorrowerState; })
+            .rollup(function(v) { return {
+              AVGCreditScoreRangeLower: d3.median(v, function(d) {return d.AVGCreditScoreRangeLower}),
+              AVGCreditScoreRangeUpper: d3.median(v, function(d) {return d.AVGCreditScoreRangeUpper}),
+              AVGBorrowerRate: d3.median(v, function(d) {return d.AVGBorrowerRate}),
+              AVGMonthlyLoanPayment: d3.median(v, function(d) {return d.AVGMonthlyLoanPayment}),
+              AVGDebtToIncomeRatio: d3.median(v, function(d) {return d.AVGDebtToIncomeRatio}),
+              AVGStatedMonthlyIncome: d3.median(v, function(d) {return d.AVGStatedMonthlyIncome})
+            }; })
+            .entries(data);
 
           states = ["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
           "ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH",
