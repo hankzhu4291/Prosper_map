@@ -108,20 +108,26 @@
             .key(function(d) { return d.creation_year; })
             .key(function(d) { return d.BorrowerState; })
             .rollup(function(v) { return {
-              AVGCreditScoreRangeLower: d3.median(v, function(d) {return d.AVGCreditScoreRangeLower}),
-              AVGCreditScoreRangeUpper: d3.median(v, function(d) {return d.AVGCreditScoreRangeUpper}),
-              AVGBorrowerRate: d3.median(v, function(d) {return d.AVGBorrowerRate}),
-              AVGMonthlyLoanPayment: d3.median(v, function(d) {return d.AVGMonthlyLoanPayment}),
-              AVGDebtToIncomeRatio: d3.median(v, function(d) {return d.AVGDebtToIncomeRatio}),
-              AVGStatedMonthlyIncome: d3.median(v, function(d) {return d.AVGStatedMonthlyIncome})
+              AVGCreditScoreRangeLower: d3.median(v, function(d)
+                                        {return d.AVGCreditScoreRangeLower}),
+              AVGCreditScoreRangeUpper: d3.median(v, function(d)
+                                        {return d.AVGCreditScoreRangeUpper}),
+              AVGBorrowerRate: d3.median(v, function(d)
+                                        {return d.AVGBorrowerRate}),
+              AVGMonthlyLoanPayment: d3.median(v, function(d)
+                                        {return d.AVGMonthlyLoanPayment}),
+              AVGDebtToIncomeRatio: d3.median(v, function(d)
+                                        {return d.AVGDebtToIncomeRatio}),
+              AVGStatedMonthlyIncome: d3.median(v, function(d)
+                                        {return d.AVGStatedMonthlyIncome})
             }; })
             .entries(data);
 
-          states = ["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
-          "ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH",
+          states = ["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT",
+           "MA",  "ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY",
           "MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT",
           "CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN",
-          "WI", "MO", "AR", "OK", "KS", "LA", "VA"];
+          "WI", "MO", "AR", "OK", "KS", "LA", "OH", "VA"];
 
           // Plot mouseOver information
         	function tooltipHtml(n, d){
@@ -129,7 +135,8 @@
             function to create html content string in tooltip div.
             */
         		return "<h4>"+n+"</h4><table>"+
-        			"<tr><td>CreditScoreRange</td><td>"+'[ '+(d.AVGCreditScoreRangeLower)+" , "+(d.AVGCreditScoreRangeUpper)+' ]'+"</td></tr>"+
+        			"<tr><td>CreditScoreRange</td><td>"+'[ '+(d.AVGCreditScoreRangeLower)+
+                          " , "+(d.AVGCreditScoreRangeUpper)+' ]'+"</td></tr>"+
         			"<tr><td>BorrowerRate</td><td>"+(d.AVGBorrowerRate)+"</td></tr>"+
               "<tr><td>MonthlyLoanPayment</td><td>"+(d.AVGMonthlyLoanPayment)+"</td></tr>"+
               "<tr><td>StatedMonthlyIncome</td><td>"+(d.AVGStatedMonthlyIncome)+"</td></tr>"+
@@ -143,8 +150,9 @@
                /*
                show the map for each year
                */
+
                // remove the previous map except for the first year 2007
-               if (! d3.select('#statesvg').selectAll('.state').empty()) { // Or just `if (element.childNodes.length)`
+               if (! d3.select('#statesvg').selectAll('.state').empty()) {
                    d3.select('#statesvg')
                     .selectAll('.state').remove();
                    d3.select('h2')
@@ -170,10 +178,14 @@
                // transform data
                states_info = filtered[0].values;
                transformed_data = {};
-               states_info.forEach(function (d){d.values['color'] =
-                      d3.interpolate("#fee6ce", "#f03b20")((d.values['AVGMonthlyLoanPayment'] - 74)/532*1.5)});
+               states_info.forEach(function (d)
+                      {d.values['color'] =
+                      d3.interpolate("#fee6ce", "#f03b20")
+                      ((d.values['AVGMonthlyLoanPayment'] - 74)/532*1.5)});
 
-               states_info.forEach(function (d) {if (states.includes(d.key)) {transformed_data[d.key] = d.values}});
+               states_info.forEach(function (d) {if (states.includes(d.key))
+                                        {transformed_data[d.key] = d.values}});
+
                //draw states on id #statesvg
                uStates.draw("#statesvg", transformed_data, tooltipHtml);
 
