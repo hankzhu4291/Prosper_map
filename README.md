@@ -22,7 +22,7 @@ There are some states in which no information is given so white blanks are shown
 
 ## Design section
 I used US map by state from 2007 to 2014 to show how the loan information changes in each state.
-Because MonthlyLoanPayment would show more variance than others and it is also a representation of loan information, this variable was used for color in the map, darker color means higher value
+Because MonthlyLoanPayment would show more variance than others and it is also a representation of loan information, this variable was used for color in the map and darker color means higher value.
 The buttons are used to select the map in each year
 
 ## Summary
