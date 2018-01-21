@@ -121,7 +121,7 @@
           "ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH",
           "MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT",
           "CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN",
-          "WI", "MO", "AR", "OK", "KS", "LA", "VA"]
+          "WI", "MO", "AR", "OK", "KS", "LA", "VA"];
 
           // Plot mouseOver information
         	function tooltipHtml(n, d){
@@ -134,11 +134,10 @@
               "<tr><td>MonthlyLoanPayment</td><td>"+(d.AVGMonthlyLoanPayment)+"</td></tr>"+
               "<tr><td>StatedMonthlyIncome</td><td>"+(d.AVGStatedMonthlyIncome)+"</td></tr>"+
               "<tr><td>DebtToIncomeRatio</td><td>"+(d.AVGDebtToIncomeRatio)+"</td></tr>"+
-
         			"</table>";
-            }
+            };
 
-            years = ['2007', '2008', '2009', '2010', '2011', '2012', '2013','2014']
+            years = ['2007', '2008', '2009', '2010', '2011', '2012', '2013','2014'];
 
            function update(year){
                /*
@@ -150,7 +149,7 @@
                     .selectAll('.state').remove();
                    d3.select('h2')
                      .text('Loan Information in each state in ' + year);
-               }
+               };
 
                // set height, margin, width
                var margin = 75,
@@ -161,15 +160,16 @@
                var svg = d3.select("#statesvg")
                    .attr("width", width + margin)
                    .attr("height", height + margin)
-                   .append('g')
+                   .append('g');
 
                // filter data by the specific year
                var filtered = infobyYearTerm.filter(function(d){
                  return d.key === year;
                });
+
                // transform data
-               states_info = filtered[0].values
-               transformed_data = {}
+               states_info = filtered[0].values;
+               transformed_data = {};
                states_info.forEach(function (d){d.values['color'] =
                       d3.interpolate("#fee6ce", "#f03b20")((d.values['AVGMonthlyLoanPayment'] - 74)/532*1.5)});
 
@@ -189,10 +189,10 @@
                    .attr("id", "linear-gradient");
 
                linearGradient
-                     .attr("x1", "0%")
-                     .attr("y1", "0%")
-                     .attr("x2", "0%")
-                     .attr("y2", "100%");
+                   .attr("x1", "0%")
+                   .attr("y1", "0%")
+                   .attr("x2", "0%")
+                   .attr("y2", "100%");
 
                //Set the color for the start (0%)
                linearGradient.append("stop")
@@ -205,8 +205,8 @@
                    .attr("stop-color", "#f03b20"); //dark orange
 
                svg.append("rect")
-                  .attr("width", 20)
-                  .attr("height", 300)
+                   .attr("width", 20)
+                   .attr("height", 300)
                    .attr("x", 910)
                    .attr("y", 210)
                   .style("fill", "url(#linear-gradient)");
@@ -214,17 +214,17 @@
                svg.append('text')
                    .attr("x", 890)
                    .attr("y", 225)
-                   .text('74')
+                   .text('74');
 
                svg.append('text')
                    .attr("x",880)
                    .attr("y", 510)
-                   .text('532')
+                   .text('532');
 
                svg.append('text')
                    .attr("x", 830)
                    .attr("y", 530)
-                   .text('Monthly Loan Payment')
+                   .text('Monthly Loan Payment');
 
               d3.select(self.frameElement).style("height", "600px");
            }
@@ -259,13 +259,13 @@
                       .transition()
                       .duration(300)
                       .style('background', 'black')
-                      .style('color', 'white')
+                      .style('color', 'white');
 
                     d3.select(this)
                       .transition()
                       .duration(300)
                       .style('background', '#f03b20')
-                      .style('color', 'white')
+                      .style('color', 'white');
 
                     update(d);
                   })
@@ -278,7 +278,7 @@
 <body>
       <script type="text/javascript">
 
-      d3.csv('./data/dropped_groupby_year_st.csv', draw)
+      d3.csv('./data/dropped_groupby_year_st.csv', draw);
 
       </script>
 </body>
